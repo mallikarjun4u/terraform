@@ -1,5 +1,73 @@
 What to learn for each module
+Example learning projects
+Project 1 (Beginner)
+VPC
+Security Group
+EC2
 
+Skills:
+
+Modules
+Variables
+Outputs
+Dependencies
+Project 2
+VPC
+EC2
+ALB
+Auto Scaling
+
+Skills:
+
+High availability
+Load balancing
+Scaling
+Project 3
+VPC
+EC2
+RDS
+IAM
+
+Skills:
+
+Three-tier architecture
+Database connectivity
+IAM roles
+Project 4
+S3
+Lambda
+CloudWatch
+IAM
+
+Skills:
+
+Serverless applications
+Event-driven architecture
+Project 5 (Production-style)
+VPC
+EKS
+ALB
+Route53
+IAM
+CloudWatch
+Auto Scaling
+
+Skills:
+
+Kubernetes
+Production networking
+Monitoring
+DNS
+Scaling
+What to learn for each module
+
+For every module, try to understand:
+
+Purpose – What AWS service does it manage?
+Inputs (variables) – What configuration can you provide?
+Outputs – What values does it expose for other modules?
+Dependencies – Which modules or resources does it rely on?
+Common options – Which settings are most frequently customized?
 For every module, try to understand:
 
 Purpose – What AWS service does it manage?
