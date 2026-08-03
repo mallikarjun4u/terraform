@@ -1,0 +1,17 @@
+
+terraform cheat sheet
+
+| Operating System / AMI          | Default Username    |
+| ------------------------------- | ------------------- |
+| Ubuntu                          | `ubuntu`            |
+| Amazon Linux 2                  | `ec2-user`          |
+| Amazon Linux 2023               | `ec2-user`          |
+| CentOS                          | `centos`            |
+| Debian                          | `admin` or `debian` |
+| Red Hat Enterprise Linux (RHEL) | `ec2-user`          |
+| SUSE Linux                      | `ec2-user`          |
+| Fedora                          | `fedora`            |
+| Oracle Linux                    | `ec2-user`          |
+| Bitnami AMIs                    | `bitnami`           |
+
+
