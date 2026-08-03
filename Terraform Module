@@ -1,3 +1,22 @@
+What to learn for each module
+
+For every module, try to understand:
+
+Purpose – What AWS service does it manage?
+Inputs (variables) – What configuration can you provide?
+Outputs – What values does it expose for other modules?
+Dependencies – Which modules or resources does it rely on?
+Common options – Which settings are most frequently customized?
+
+For example, with the EC2 module:
+
+Inputs: instance_type, ami, subnet_id, vpc_security_group_ids
+Outputs: id, arn, private_ip, public_ip
+Dependencies: VPC, subnet, security group, IAM role (optional)
+
+
+
+
 | AWS Resource           | Terraform Module                           |
 | ---------------------- | ------------------------------------------ |
 | EC2 Instance           | `terraform-aws-modules/ec2-instance/aws`   |
