@@ -1,0 +1,19 @@
+| AWS Resource           | Terraform Module                           |
+| ---------------------- | ------------------------------------------ |
+| EC2 Instance           | `terraform-aws-modules/ec2-instance/aws`   |
+| VPC                    | `terraform-aws-modules/vpc/aws`            |
+| S3 Bucket              | `terraform-aws-modules/s3-bucket/aws`      |
+| IAM                    | `terraform-aws-modules/iam/aws`            |
+| RDS Database           | `terraform-aws-modules/rds/aws`            |
+| EKS Kubernetes Cluster | `terraform-aws-modules/eks/aws`            |
+| Lambda                 | `terraform-aws-modules/lambda/aws`         |
+| ECS                    | `terraform-aws-modules/ecs/aws`            |
+| ALB (Load Balancer)    | `terraform-aws-modules/alb/aws`            |
+| Security Group         | `terraform-aws-modules/security-group/aws` |
+| Route53                | `terraform-aws-modules/route53/aws`        |
+| CloudWatch             | `terraform-aws-modules/cloudwatch/aws`     |
+| Auto Scaling Group     | `terraform-aws-modules/autoscaling/aws`    |
+| ElastiCache            | `terraform-aws-modules/elasticache/aws`    |
+| OpenSearch             | `terraform-aws-modules/opensearch/aws`     |
+
+terraform-aws-modules/<resource-name>/aws
