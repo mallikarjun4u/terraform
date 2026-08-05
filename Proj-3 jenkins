@@ -1,0 +1,118 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  required_version = ">= 1.5.0"
+}
+
+provider "aws" {
+  region = "ap-south-2"
+}
+
+# Get latest Ubuntu 24.04 LTS AMI
+data "aws_ssm_parameter" "ubuntu" {
+  name = "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id"
+}
+
+
+resource "aws_security_group" "jenkins_sg" {
+
+  name = "jenkins-security-group"
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+  ingress {
+    description = "Jenkins"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+}
+
+
+resource "aws_instance" "jenkins" {
+
+  ami = data.aws_ssm_parameter.ubuntu.value
+
+  instance_type = "t3.micro"
+
+  key_name = "myec2"
+
+
+  vpc_security_group_ids = [
+    aws_security_group.jenkins_sg.id
+  ]
+
+
+  user_data = <<-EOF
+              #!/bin/bash
+
+              apt update -y
+
+              apt upgrade -y
+
+
+              # Install Java 21
+              apt install openjdk-21-jdk -y
+
+
+              # Jenkins key
+              curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key | \
+              gpg --dearmor -o /usr/share/keyrings/jenkins-keyring.gpg
+
+
+              # Jenkins repository
+              echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/" \
+              > /etc/apt/sources.list.d/jenkins.list
+
+
+              apt update -y
+
+
+              # Install Jenkins
+              apt install jenkins -y
+
+
+              systemctl enable jenkins
+              systemctl start jenkins
+
+
+              EOF
+
+
+  tags = {
+    Name = "terraform-jenkins-server"
+  }
+
+}
+
+
+output "public_ip" {
+  value = aws_instance.jenkins.public_ip
+}
+
+
+output "jenkins_url" {
+  value = "http://${aws_instance.jenkins.public_ip}:8080"
+}
