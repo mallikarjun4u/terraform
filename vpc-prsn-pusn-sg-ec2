@@ -75,16 +75,32 @@ data "aws_ssm_parameter" "ubuntu_2204" {
 # 8. Create a Security Group for the EC2 Instance
 resource "aws_security_group" "public_ec2_sg" {
   name        = "public-ec2-sg"
-  description = "Allow SSH inbound and all outbound internet traffic"
+  description = "Allow SSH and HTTP inbound, and all outbound"
   vpc_id      = aws_vpc.main_vpc.id
 
-  # Inbound rules
+  # Allow SSH
   ingress {
     description = "Allow SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Note: For better security, replace with your specific IP address e.g., ["203.0.113.0/32"]
+    cidr_blocks = ["0.0.0.0/0"] 
+  }
+
+  # NEW: Allow HTTP (Web Traffic)
+  ingress {
+    description = "Allow HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "Allow HTTPs"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # Outbound rules
@@ -100,24 +116,37 @@ resource "aws_security_group" "public_ec2_sg" {
     Name = "public-ec2-sg"
   }
 }
-
 # 9. Create the EC2 Instance in the Public Subnet
 resource "aws_instance" "public_ubuntu" {
   ami           = data.aws_ssm_parameter.ubuntu_2204.value
-  instance_type = "t3.micro" # Note: t3 instances are generally preferred/available in newer regions like ap-south-2
+  instance_type = "t3.micro" 
   subnet_id     = aws_subnet.public_subnet.id
 
-  vpc_security_group_ids = [aws_security_group.public_ec2_sg.id]
-
-  # Optional: Automatically assign a public IP (redundant if map_public_ip_on_launch is true on the subnet, but good practice to explicitly state)
+  vpc_security_group_ids      = [aws_security_group.public_ec2_sg.id]
   associate_public_ip_address = true
-  # key_name = aws_key_pair.deployer_key.key_name
-  key_name = "kp"   
+  key_name                    = "kp"   
+  
+  # NEW: Add user_data to install and configure an application
+  user_data = <<-EOF
+              #!/bin/bash
+              # Update the system
+              apt-get update -y
+              
+              # Install Nginx web server
+              apt-get install -y nginx
+              
+              # Start and enable Nginx
+              systemctl start nginx
+              systemctl enable nginx
+              
+              # Create a simple HTML application page
+              echo "<h1>Namaste Hyderabad! The application is running successfully.</h1>" > /var/www/html/index.html
+              EOF
+
   tags = {
     Name = "public-ubuntu-server"
   }
 }
-
 # 10. Output the Public IP to easily access it after creation
 output "ec2_public_ip" {
   description = "The public IP address of the Ubuntu instance"
