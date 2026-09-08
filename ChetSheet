@@ -20,6 +20,18 @@ Public Access Block (aws_s3_bucket_public_access_block)
 
 Website Hosting (aws_s3_bucket_website_configuration)
 
+resource "aws_s3_bucket_public_access_block" "my_bucket_bpa" {
+  bucket = aws_s3_bucket.my_first_bucket.id # మీ బకెట్ కి లింక్ చేస్తున్నాం
+
+  # ఈ 4 సెట్టింగ్స్ true పెడితే, మీ బకెట్ 100% సేఫ్ గా ఉంటుంది
+  block_public_acls       = true
+  ignore_public_acls      = true
+  block_public_policy     = true
+  restrict_public_buckets = true
+}
+
+
+
 
 మీరు బకెట్ క్రియేట్ చేసేటప్పుడు ఇవి తెలుసుకోవడం చాలా ముఖ్యం.
 
