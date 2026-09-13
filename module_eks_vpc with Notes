@@ -1,3 +1,83 @@
+aws eks update-kubeconfig --region <your-region> --name <your-cluster-name>
+How to verify: Run kubectl get svc. You should see the default kubernetes ClusterIP service.
+
+kubectl apply -f pod.yaml
+kubectl apply -f service.yaml
+kubectl port-forward svc/my-web-service 80:80
+kubectl delete -f pod.yaml
+kubectl delete svc my-web-service
+
+Meeru cheppina steps ki exact commands ivi. Mee cluster name (`mallikarjun-eks-cluster`) mariyu region (`ap-south-2`) ni base chesukuni ee commands unnai:
+
+1. **1) kubectl tho cluster link chesaru:** AWS CLI command.
+Cluster tho connect avvadaniki ee command vadi `kubeconfig` update chesaru.
+
+```bash
+aws eks update-kubeconfig --region ap-south-2 --name mallikarjun-eks-cluster
+
+```
+
+
+2. **2) Pod ni cluster lo install chesaru:** Standalone pod creation.
+Mee `pod.yaml` file ni apply chesaru.
+
+```bash
+kubectl apply -f pod.yaml
+
+```
+
+
+3. **3) Service ni install chesaru:** AWS Load Balancer creation.
+Pod ni internet ki expose cheyadaniki `service.yaml` apply chesaru.
+
+```bash
+kubectl apply -f service.yaml
+
+```
+
+
+4. **4) Pod work avtundho ledho check chesaru:** Verification.
+Pod running status lo undo ledo mariyu Service ki external IP vachindo ledo check chesaru.
+
+```bash
+# Pod status check cheyadaniki:
+kubectl get pods
+
+# Service External-IP (Load Balancer URL) thelusukovadaniki:
+kubectl get svc
+
+```
+
+
+5. **5) Pod ni delete chesaru:** Cleanup standalone pod.
+Testing aipoyaka standalone pod ni terminate chesaru.
+
+```bash
+kubectl delete pod my-web-pod
+# (or) kubectl delete -f pod.yaml
+
+```
+
+
+6. **6) Deployment deploy chesaru (Replicas: 3):** High Availability.
+Final ga 3 copies run avvadaniki Deployment file apply chesaru.
+
+```bash
+kubectl apply -f deployment.yaml
+
+```
+
+
+Mee flow and understanding chala clear ga undi! Ee taruvata final ga service ni delete chesi (`kubectl delete svc my-web-service`), aa tharuvata infrastructure mottam `terraform destroy` tho clear chesaru.
+
+Inkemaina specific commands gani, concepts gani doubt unte adagandi!
+
+
+
+
+
+
+
 provider "aws" {
   region = "ap-south-2"
 }
