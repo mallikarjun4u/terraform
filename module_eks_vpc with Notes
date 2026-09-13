@@ -160,3 +160,35 @@ NAT Gateway ఎనేబుల్ చేశాం: ప్రైవేట్ న�
 private_subnet_tags యాడ్ చేశాం: జావా లాంటి అప్లికేషన్స్ ని బయటి వారికి కనిపించకుండా సురక్షితంగా రన్ చేసేటప్పుడు, వాటికోసం 'ఇంటర్నల్ లోడ్ బ్యాలెన్సర్స్ (Internal Load Balancers)' క్రియేట్ చేయడానికి ఈ kubernetes.io/role/internal-elb ట్యాగ్ తప్పనిసరిగా అవసరం అవుతుంది.
 
 EKS లో subnet_ids మార్చాం: EKS మోడ్యూల్ లో వర్కర్ నోడ్స్ క్రియేట్ అయ్యే నెట్‌వర్క్ ని module.vpc.private_subnets గా మార్చాం. దీనివల్ల మీ యాప్స్ అన్నీ ఇప్పుడు 100% పబ్లిక్ ఇంటర్నెట్ కి దూరంగా రక్షించబడి ఉంటాయి.
+
+*************
+aws eks update-nodegroup-config --cluster-name mallikarjun-eks-cluster --nodegroup-name default-20260913001659861100000013 --scaling-config desiredSize=3
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-web-pod
+  labels:
+    app: web
+spec:
+  containers:
+  - name: web-container
+    # IMPORTANT: Replace with your actual image name from Step 3
+    image: mallik4u/my-eks-app:v1
+    ports:
+    - containerPort: 80
+
+*****  kubectl apply -f pod.yaml
+***** kubectl get pods
+***** kubectl port-forward pod/my-web-pod 8080:80
+******  http://localhost:8080
+Press Ctrl+C in your terminal when you are done viewing it to close the tunnel.
+
+kubectl delete pod my-web-pod
+kubectl delete svc --all
+
+
+
+
+
+
